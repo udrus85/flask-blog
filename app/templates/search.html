@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">🔍 Результаты поиска</h1>
+
+{% if query %}
+<p class="lead">Результаты для: <strong>"{{ query }}"</strong></p>
+
+{% if posts %}
+<p class="text-muted">Найдено: {{ posts|length }} публикаций</p>
+
+{% for post in posts %}
+<article class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title h5">
+            <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="text-decoration-none">
+                {{ post.title }}
+            </a>
+        </h2>
+        <p class="card-text text-muted small">
+            <span>👤 {{ post.author.username }}</span>
+            <span class="mx-2">|</span>
+            <span>📅 {{ post.created_at.strftime('%d.%m.%Y') }}</span>
+        </p>
+        <p class="card-text">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+    </div>
+</article>
+{% endfor %}
+
+{% else %}
+<div class="alert alert-warning">
+    <p class="mb-0">По запросу "{{ query }}" ничего не найдено.</p>
+</div>
+{% endif %}
+
+{% else %}
+<div class="alert alert-info">
+    <p class="mb-0">Введите поисковый запрос в поле поиска.</p>
+</div>
+{% endif %}
+
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary">← Вернуться на главную</a>
+{% endblock %}
+

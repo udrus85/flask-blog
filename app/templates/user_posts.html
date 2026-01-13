@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Публикации {{ user.username }} - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-4">👤 Публикации пользователя {{ user.username }}</h1>
+
+        {% if user.bio %}
+        <p class="lead">{{ user.bio }}</p>
+        {% endif %}
+
+        <p class="text-muted">
+            Зарегистрирован: {{ user.created_at.strftime('%d.%m.%Y') }}
+            | Публикаций: {{ user.posts.filter_by(is_published=True).count() }}
+        </p>
+
+        <hr>
+
+        {% if posts.items %}
+            {% for post in posts.items %}
+            <article class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title h5">
+                        <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <p class="card-text text-muted small">
+                        📅 {{ post.created_at.strftime('%d.%m.%Y') }}
+                        | 👁 {{ post.views }} просмотров
+                    </p>
+                    <p class="card-text">{{ post.content[:200] }}...</p>
+                </div>
+            </article>
+            {% endfor %}
+
+            {% if posts.has_prev or posts.has_next %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('auth.user_posts', username=user.username, page=posts.prev_num) }}">← Предыдущая</a>
+                    </li>
+                    {% endif %}
+                    {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('auth.user_posts', username=user.username, page=posts.next_num) }}">Следующая →</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                У пользователя пока нет публикаций.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

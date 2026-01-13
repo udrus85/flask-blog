@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Посты с тегом #{{ tag.name }} - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">🏷 Посты с тегом <span class="badge bg-primary">#{{ tag.name }}</span></h1>
+
+{% if posts.items %}
+    {% for post in posts.items %}
+    <article class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title h5">
+                <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="text-decoration-none">
+                    {{ post.title }}
+                </a>
+            </h2>
+            <p class="card-text text-muted small">
+                <span>👤 <a href="{{ url_for('auth.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></span>
+                <span class="mx-2">|</span>
+                <span>📅 {{ post.created_at.strftime('%d.%m.%Y') }}</span>
+                <span class="mx-2">|</span>
+                <span>👁 {{ post.views }}</span>
+            </p>
+            <p class="card-text">{{ post.content[:200] }}...</p>
+            {% if post.tags %}
+            <div>
+                {% for t in post.tags %}
+                <a href="{{ url_for('posts.posts_by_tag', tag_name=t.name) }}"
+                   class="badge {{ 'bg-primary' if t.name == tag.name else 'bg-secondary' }} text-decoration-none">
+                    #{{ t.name }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </article>
+    {% endfor %}
+
+    {% if posts.has_prev or posts.has_next %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if posts.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('posts.posts_by_tag', tag_name=tag.name, page=posts.prev_num) }}">← Предыдущая</a>
+            </li>
+            {% endif %}
+            {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('posts.posts_by_tag', tag_name=tag.name, page=posts.next_num) }}">Следующая →</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">
+        Нет постов с этим тегом.
+    </div>
+{% endif %}
+
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary">← На главную</a>
+{% endblock %}
+

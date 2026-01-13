@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}О проекте - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="mb-4">📖 О проекте Flask Blog</h1>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4">🎯 Цель проекта</h2>
+                <p>Этот проект демонстрирует навыки работы с фреймворком Flask и сопутствующими технологиями.
+                   Реализован полноценный блог с системой аутентификации, постами, комментариями и тегами.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4">🛠 Используемые технологии</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Backend</h5>
+                        <ul>
+                            <li><strong>Flask</strong> - веб-фреймворк</li>
+                            <li><strong>Flask-SQLAlchemy</strong> - ORM для работы с БД</li>
+                            <li><strong>Flask-Login</strong> - управление сессиями</li>
+                            <li><strong>Flask-WTF</strong> - формы и CSRF защита</li>
+                            <li><strong>Flask-Migrate</strong> - миграции БД</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Frontend</h5>
+                        <ul>
+                            <li><strong>Bootstrap 5</strong> - CSS фреймворк</li>
+                            <li><strong>Jinja2</strong> - шаблонизатор</li>
+                        </ul>
+                        <h5>Инструменты</h5>
+                        <ul>
+                            <li><strong>SQLite</strong> - база данных</li>
+                            <li><strong>pytest</strong> - тестирование</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4">✨ Функциональность</h2>
+                <ul>
+                    <li>Регистрация и аутентификация пользователей</li>
+                    <li>Хеширование паролей</li>
+                    <li>Создание, редактирование и удаление постов</li>
+                    <li>Комментирование постов</li>
+                    <li>Теги для постов</li>
+                    <li>Поиск по постам</li>
+                    <li>Пагинация</li>
+                    <li>Счетчик просмотров</li>
+                    <li>Черновики постов</li>
+                    <li>Профили пользователей</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4">📁 Структура проекта</h2>
+                <pre class="bg-light p-3 rounded"><code>flask-blog/
+├── app/
+│   ├── __init__.py      # Фабрика приложения
+│   ├── models.py        # Модели SQLAlchemy
+│   ├── forms.py         # WTForms формы
+│   ├── routes.py        # Маршруты (Blueprints)
+│   ├── templates/       # Jinja2 шаблоны
+│   └── static/          # CSS, JS, изображения
+├── tests/               # Тесты
+├── config.py            # Конфигурации
+├── run.py              # Точка входа
+└── requirements.txt     # Зависимости</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

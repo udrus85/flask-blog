@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-4">📰 Последние публикации</h1>
+
+        {% if posts.items %}
+            {% for post in posts.items %}
+            <article class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title h4">
+                        <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <p class="card-text text-muted small">
+                        <span>👤 <a href="{{ url_for('auth.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></span>
+                        <span class="mx-2">|</span>
+                        <span>📅 {{ post.created_at.strftime('%d.%m.%Y') }}</span>
+                        <span class="mx-2">|</span>
+                        <span>👁 {{ post.views }} просмотров</span>
+                        <span class="mx-2">|</span>
+                        <span>💬 {{ post.comments.count() }} комментариев</span>
+                    </p>
+                    <p class="card-text">
+                        {{ post.content[:300] }}{% if post.content|length > 300 %}...{% endif %}
+                    </p>
+                    {% if post.tags %}
+                    <div class="mb-2">
+                        {% for tag in post.tags %}
+                        <a href="{{ url_for('posts.posts_by_tag', tag_name=tag.name) }}" class="badge bg-secondary text-decoration-none">
+                            #{{ tag.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="btn btn-primary btn-sm">
+                        Читать далее →
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+
+            <!-- Пагинация -->
+            {% if posts.has_prev or posts.has_next %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.index', page=posts.prev_num) }}">← Предыдущая</a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            {% if page_num == posts.page %}
+                            <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.index', page=posts.next_num) }}">Следующая →</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                <h4>Пока нет публикаций</h4>
+                <p>Будьте первым, кто напишет пост!</p>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('posts.create_post') }}" class="btn btn-primary">Создать пост</a>
+                {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Зарегистрироваться</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🏷 Теги</h5>
+            </div>
+            <div class="card-body">
+                {% set tags = [] %}
+                <p class="text-muted">Теги появятся после создания постов</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">ℹ️ О блоге</h5>
+            </div>
+            <div class="card-body">
+                <p>Это демонстрационный блог на Flask.</p>
+                <p class="mb-0">Технологии:</p>
+                <ul class="mb-0">
+                    <li>Flask</li>
+                    <li>SQLAlchemy</li>
+                    <li>Flask-Login</li>
+                    <li>Flask-WTF</li>
+                    <li>Bootstrap 5</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
