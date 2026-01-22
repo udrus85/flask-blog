@@ -81,7 +81,7 @@ class TestPostModel:
     def test_post_creation(self, app, sample_user):
         """Тест создания поста."""
         with app.app_context():
-            user = User.query.get(sample_user)
+            user = db.session.get(User, sample_user)
             post = Post(
                 title='Test Post',
                 content='Test content',
@@ -98,7 +98,7 @@ class TestPostModel:
     def test_increment_views(self, app, sample_user):
         """Тест увеличения счетчика просмотров."""
         with app.app_context():
-            user = User.query.get(sample_user)
+            user = db.session.get(User, sample_user)
             post = Post(title='View Test', content='Content', author=user)
             db.session.add(post)
             db.session.commit()
@@ -112,7 +112,7 @@ class TestPostModel:
     def test_post_tags(self, app, sample_user):
         """Тест связи постов с тегами."""
         with app.app_context():
-            user = User.query.get(sample_user)
+            user = db.session.get(User, sample_user)
             tag1 = Tag(name='python')
             tag2 = Tag(name='flask')
             post = Post(title='Tagged Post', content='Content', author=user)
@@ -132,7 +132,7 @@ class TestCommentModel:
     def test_comment_creation(self, app, sample_user):
         """Тест создания комментария."""
         with app.app_context():
-            user = User.query.get(sample_user)
+            user = db.session.get(User, sample_user)
             post = Post(title='Post', content='Content', author=user)
             comment = Comment(content='Test comment', author=user, post=post)
 
